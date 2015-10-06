@@ -1,0 +1,2 @@
+# Testbed.AutoMapper
+AutoMapper testbed
