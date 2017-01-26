@@ -25,10 +25,10 @@
 
             try
             {
-                #region Setup
-                #endregion
+				#region Setup
+				#endregion
 
-				AutoMapperConfiguration.Configure();
+				InitializeAutoMapper();
 
 				Mapper.AssertConfigurationIsValid();
 
@@ -52,6 +52,22 @@
 
 
 
+
+		private static void InitializeAutoMapper()
+		{
+			Mapper.Initialize(cfg => 
+			{
+				cfg.CreateMap<DateTime, string>()
+					.ConvertUsing(x => x.ToUniversalTime().ToString("yyyy-MM-ddThh:mm:ssZ"));
+
+				cfg.CreateMap<MyDto, MyModel>()
+					.ForMember(x => x.Name, opt => opt.NullSubstitute("Anonymous"));
+			});
+		}
+
+
+
+
        
         private static void ProgramBody()
         {
@@ -70,18 +86,6 @@
 			Console.WriteLine(y.Date);
 		}
     }
-
-	static class AutoMapperConfiguration
-	{
-		internal static void Configure()
-		{
-			Mapper.CreateMap<DateTime, string>()
-				.ConvertUsing(x => x.ToUniversalTime().ToString("yyyy-MM-ddThh:mm:ssZ"));
-
-			Mapper.CreateMap<MyDto, MyModel>()
-				.ForMember(x => x.Name, opt => opt.NullSubstitute("Anonymous"));
-		}
-	}
 
 	public class MyDto
 	{
